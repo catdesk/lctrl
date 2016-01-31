@@ -11,6 +11,7 @@ end
 
 aliases = {
   "-s"  => "--server",
+  "-d"  => "--daemon",
   "-h"  => "--help"
 }
 
@@ -35,11 +36,16 @@ if ARGV.include?("--help")
   puts "          lsrvr [options]"
   puts "      Options:"
   puts "          --server [option]       # Provide the name of a server, if none default ports (8783, 8784, 8785) will be used\n"
+  puts "          --daemon                # Daemonize the server\n"
   puts "      Example:"
   puts "          lsrvr -s desk\n\n"
 else
   5.times do |i|
-    system "serialport-server /dev/ttyACM#{i} -hp #{@configuration["http_port"]} -wp #{@configuration["websocket_port"]} -sp #{@configuration["tcp_port"]}"
+    if ARGV.include?("--daemon")
+      system "nohup serialport-server /dev/ttyACM#{i} -hp #{@configuration["http_port"]} -wp #{@configuration["websocket_port"]} -sp #{@configuration["tcp_port"]} &"
+    else
+      system "serialport-server /dev/ttyACM#{i} -hp #{@configuration["http_port"]} -wp #{@configuration["websocket_port"]} -sp #{@configuration["tcp_port"]}"
+    end
   end
 end
 
