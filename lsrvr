@@ -41,7 +41,6 @@ if ARGV.include?("--help")
   puts "          lsrvr -s desk\n\n"
 else
   5.times do |i|
-    p i
     if ARGV.include?("--daemon")
       system "nohup serialport-server /dev/ttyACM#{i} -hp #{@configuration["http_port"]} -wp #{@configuration["websocket_port"]} -sp #{@configuration["tcp_port"]} &"
     else
