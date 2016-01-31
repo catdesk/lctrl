@@ -1,6 +1,6 @@
 # ltctrl
 
-Simple command line interface to control RGB light strip, best used in conjuction with the gem serialport-server but any service that takes in messages from POST requests and passes them along to the serial port will work.
+Simple command line interface to control RGB light strip, best used in conjuction with the gem serialport-server but any service that takes in messages from POST requests and passes them along to the serial port will work. Using this you can control a RGB light strip connected to another computer that is exposing an API. 
 
 ## Installation
 
@@ -12,7 +12,15 @@ Then you copy the config file to your home directory:
 
     cp config/config.sample.yml ~/.lctrl.yml
 
-Then install the s
+Then install the serialport-server gem:
+
+    gem install serialport-server
+
+Run the serialport-server:
+
+    serialport-server /dev/ttyACM0 -hp 8783 -wp 8784 -sp 8785 
+
+Then you can use the ltctrl command to control the lights. 
 
 ## Usage
 

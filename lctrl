@@ -88,6 +88,7 @@ elsif ARGV.include?("--help")
   puts "          --green [option]       # Provide a number 0-255, 0 being off and 255 being the brightest\n"
   puts "          --blue  [option]       # Provide a number 0-255, 0 being off and 255 being the brightest\n"
   puts "          --color [option]       # Select between, \"red\", \"blue\", \"green\" or \"white\"\n"
+  puts "          --json  [json]         # Supply json directly: {\"red\": 0, \"blue\": 255, \"green\", 0}"
   puts "          --random               # Randomly select a color\n"
   puts "          --off                  # Turns off the lights\n"
   puts "      Example:"
