@@ -1,0 +1,16 @@
+# ltctrl
+
+Simple command line interface to control RGB light strip, best used in conjuction with simple serial server gem.
+
+    Usage:
+    Please specify colors by name, json or rgb:
+        lctrl [options]
+    Options:
+        --red   [option]       # Provide a number 0-255, 0 being off and 255 being the brightest
+        --green [option]       # Provide a number 0-255, 0 being off and 255 being the brightest
+        --blue  [option]       # Provide a number 0-255, 0 being off and 255 being the brightest
+        --color [option]       # Select between, "red", "blue", "green" or "white"
+        --random               # Randomly select a color
+        --off                  # Turns off the lights
+    Example:
+        lctrl -g 255 -b 24

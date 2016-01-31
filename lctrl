@@ -1,0 +1,95 @@
+#!/usr/bin/env ruby
+require 'rubygems'
+require 'json'
+require 'yaml'
+
+if File.expand_path('./../config/config.yml', __FILE__)
+  filepath = File.expand_path('./../config/config.yml', __FILE__)
+else
+  filepath = File.expand_path('~/.lctrl.yml', __FILE__)
+end
+if filepath 
+  configuration = YAML::load_file(filepath)
+  configuration.each do |config, option|
+    if    config == "host_ip"
+      HOST_IP        = option
+    elsif config == "http_port"
+      HTTP_PORT      = option
+    elsif config == "websocket_port"
+      WEBSOCKET_PORT = option
+    elsif config == "serial_port"
+      TCP_PORT    = option
+    end
+  end
+else
+  HOST_IP        = "localhost"
+  HTTP_PORT      = 8783
+  WEBSOCKET_PORT = 8784
+  TCP_PORT       = 8785
+
+@light_servers = {:default => HOST_IP}
+
+def set_lights(red: 0, green: 0, blue: 0, location: "all")
+  colors = "{\"red\":#{red},\"green\":#{green},\"blue\":#{blue}}"
+  if location == "all"
+    @light_servers.each do |key, value|
+      system "curl -d '#{colors}' http://#{@light_servers[key]}:#{HTTP_PORT}"
+    end
+  else
+    system "curl -d '#{colors}' http://#{@light_servers[location.to_sym]}:#{HTTP_PORT}"
+  end
+  puts "\n"
+end
+
+ARGV << '--help' if ARGV.empty?
+
+aliases = {
+  "-j"  => "--json",
+  "-r"  => "--red",
+  "-b"  => "--blue",
+  "-g"  => "--green",
+  "-rn" => "--random",
+  "-x"  => "--off",
+  "-h"  => "--help",
+  "-c"  => "--color"
+}
+
+ARGV.each_with_index do |argument, index|
+  ARGV[index] = aliases[argument] || argument
+end
+
+if ARGV.include?("--blue") or ARGV.include?("--red") or ARGV.include?("--green")
+  red   = ARGV.include?("--red")   ? ARGV[ARGV.index("--red")+1]   : 0
+  green = ARGV.include?("--green") ? ARGV[ARGV.index("--green")+1] : 0
+  blue  = ARGV.include?("--blue")  ? ARGV[ARGV.index("--blue")+1]  : 0
+  set_lights(red: red, green: green, blue: blue)
+elsif ARGV.include?("--random")
+  set_lights(red: rand(255), green: rand(255), blue: rand(255))
+elsif (ARGV.include?("--color") and ARGV[ARGV.index("--color")+1] == "white")
+  set_lights(red: 255, green: 255, blue: 255)
+elsif (ARGV.include?("--color") and ARGV[ARGV.index("--color")+1] == "blue")
+  set_lights(blue: 255)
+elsif ARGV.include?("--off")
+  set_lights
+elsif ARGV.include?("--json")
+  colors = JSON.parse(ARGV[ARGV.index("--json")+1])
+  colors["red"]   = 0     if colors["red"].nil?
+  colors["green"] = 0     if colors["green"].nil?
+  colors["blue"]  = 0     if colors["blue"].nil?
+  room            = "all" if room.nil?
+  set_lights(red: colors["red"], green: colors["green"], blue: colors["blue"])
+elsif ARGV.include?("--help")
+  puts "\n    ## Light Controller"
+  puts "      Usage:"
+  puts "      Please specify colors by name, json or rgb:\n"
+  puts "          lctrl [options]"
+  puts "      Options:"
+  puts "          --red   [option]       # Provide a number 0-255, 0 being off and 255 being the brightest\n"
+  puts "          --green [option]       # Provide a number 0-255, 0 being off and 255 being the brightest\n"
+  puts "          --blue  [option]       # Provide a number 0-255, 0 being off and 255 being the brightest\n"
+  puts "          --color [option]       # Select between, \"red\", \"blue\", \"green\" or \"white\"\n"
+  puts "          --random               # Randomly select a color\n"
+  puts "          --off                  # Turns off the lights\n"
+  puts "      Example:"
+  puts "          lctrl -g 255 -b 24\n\n"
+end
