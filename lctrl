@@ -10,35 +10,23 @@ else
 end
 
 if filepath 
-  configuration = YAML::load_file(filepath)
-  configuration.each do |config, option|
-    if    config == "host_ip"
-      HOST_IP        = option
-    elsif config == "http_port"
-      HTTP_PORT      = option
-    elsif config == "websocket_port"
-      WEBSOCKET_PORT = option
-    elsif config == "tcp_port"
-      TCP_PORT    = option
-    end
-  end
+  @configuration = YAML::load_file(filepath)
 else
-  HOST_IP        = "localhost"
-  HTTP_PORT      = 8783
-  WEBSOCKET_PORT = 8784
-  TCP_PORT       = 8785
+  puts "# Error"
+  puts "You must configure at least one server in the configuration file."
+  exit
 end
-
-@light_servers = {:default => HOST_IP}
 
 def set_lights(red: 0, green: 0, blue: 0, location: "all")
   colors = "{\"red\":#{red},\"green\":#{green},\"blue\":#{blue}}"
   if location == "all"
-    @light_servers.each do |key, value|
-      system "curl -d '#{colors}' http://#{@light_servers[key]}:#{HTTP_PORT}"
+  @configuration["servers"].each do |server, config|
+      p "Attempting to update the lights on: #{server}..."
+      system "curl -d '#{colors}' http://#{config["host_ip"]}:#{config["http_port"]}"
     end
   else
-    system "curl -d '#{colors}' http://#{@light_servers[location.to_sym]}:#{HTTP_PORT}"
+    p "Attempting to update the lights on: #{@configuration[location]}..."
+    system "curl -d '#{colors}' http://#{@configuration[location]["host_ip"]}:#{@configuration[location]["http_port"]}"
   end
   puts "\n"
 end
