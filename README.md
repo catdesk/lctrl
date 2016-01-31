@@ -2,28 +2,30 @@
 
 Simple command line interface to control RGB light strip, best used in conjuction with the gem serialport-server but any service that takes in messages from POST requests and passes them along to the serial port will work. Using this you can control a RGB light strip connected to another computer that is exposing an API. 
 
+Included is arduino code to accept json structures that provide brightness of each red, blue and green between 0-255 and the speed of which to fade to that brightness.
+
 ## Installation
+
+Install the dependencies
+
+    bundle
 
 To install it is best to put the lctrl executable your bin folder:
 
     cp lctrl /usr/local/bin
+    cp lsrvr /usr/local/bin
 
-Then you copy the config file to your home directory:
+Then you copy the config file to your home directory, update the config to suite your needs
 
     cp config/config.sample.yml ~/.lctrl.yml
 
-Then install the serialport-server gem:
+Then start the server
 
-    gem install serialport-server
-
-Run the serialport-server:
-
-    serialport-server /dev/ttyACM0 -hp 8783 -wp 8784 -sp 8785 
+    lsrvr --server desk
 
 Then you can use the ltctrl command to control the lights. 
 
 ## Usage
-
 
     Usage:
     Please specify colors by name, json or rgb:
@@ -37,8 +39,19 @@ Then you can use the ltctrl command to control the lights.
         --random               # Randomly select a color
         --off                  # Turns off the lights
     Example:
+        lctrl --green 255 --blue 24
         lctrl -g 255 -b 24
+
+
+    Usage:
+    Please specify the server defined in the configuration to start:
+        lsrvr [options]
+    Options:
+        --server [option]       # Provide a server defined in the config file
+    Example:
+        lctrl --server wall
+        lctrl -s wall
 
 ## Roadmap
 
-If I have time in the future I would like to add more configuration options, you should be able to specify if you would like to send the message directly over serial and what port, or over websockets, or over TCP. You should also be able to supply the details for several light strips. The original code was able to control two. 
+If I have time in the future I would like to add more configuration options, you should be able to specify if you would like to send the message directly over serial and what port, or over websockets, or over TCP.

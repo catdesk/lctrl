@@ -3,7 +3,14 @@
 
 api_version: "1"
 
-host_ip: "localhost"
-http_port: 8783
-websocket_port: 8784
-tcp_port: 8785
+servers:
+  desk:
+    host_ip: "localhost"
+    http_port: 8783
+    websocket_port: 8784
+    tcp_port: 8785
+  wall:
+    host_ip: "192.168.1.105"
+    http_port: 8783
+    websocket_port: 8784
+    tcp_port: 8785

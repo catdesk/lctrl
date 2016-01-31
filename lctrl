@@ -18,7 +18,7 @@ if filepath
       HTTP_PORT      = option
     elsif config == "websocket_port"
       WEBSOCKET_PORT = option
-    elsif config == "serial_port"
+    elsif config == "tcp_port"
       TCP_PORT    = option
     end
   end

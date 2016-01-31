@@ -1,0 +1,38 @@
+#!/usr/bin/env ruby
+require 'rubygems'
+require 'yaml'
+
+unless File.expand_path('~/.lctrl.yml', __FILE__).nil?
+  filepath = File.expand_path('~/.lctrl.yml', __FILE__)
+else
+  filepath = File.expand_path('./../config/config.yml', __FILE__)
+end
+
+
+aliases = {
+  "-s"  => "--server",
+  "-h"  => "--help"
+}
+
+ARGV << '--help' if ARGV.empty?
+
+if filepath 
+  configuration = YAML::load_file(filepath)
+  configuration.each do |config, option|
+    if config    == "http_port"
+      HTTP_PORT      = option
+    elsif config == "websocket_port"
+      WEBSOCKET_PORT = option
+    elsif config == "tcp_port"
+      TCP_PORT       = option
+    end
+  end
+else
+  HTTP_PORT      = 8783
+  WEBSOCKET_PORT = 8784
+  TCP_PORT       = 8785
+end
+
+5.times do |i|
+  system "serialport-server /dev/ttyACM#{i} -hp #{HTTP_PORT} -wp #{WEBSOCKET_PORT} -sp #{TCP_PORT}"
+end
