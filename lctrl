@@ -3,11 +3,12 @@ require 'rubygems'
 require 'json'
 require 'yaml'
 
-if File.expand_path('./../config/config.yml', __FILE__)
-  filepath = File.expand_path('./../config/config.yml', __FILE__)
-else
+unless File.expand_path('~/.lctrl.yml', __FILE__).nil?
   filepath = File.expand_path('~/.lctrl.yml', __FILE__)
+else
+  filepath = File.expand_path('./../config/config.yml', __FILE__)
 end
+
 if filepath 
   configuration = YAML::load_file(filepath)
   configuration.each do |config, option|
@@ -26,6 +27,7 @@ else
   HTTP_PORT      = 8783
   WEBSOCKET_PORT = 8784
   TCP_PORT       = 8785
+end
 
 @light_servers = {:default => HOST_IP}
 
