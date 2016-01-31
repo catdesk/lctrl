@@ -14,25 +14,32 @@ aliases = {
   "-h"  => "--help"
 }
 
-ARGV << '--help' if ARGV.empty?
+ARGV.each_with_index do |argument, index|
+  ARGV[index] = aliases[argument] || argument
+end
 
-if filepath 
-  configuration = YAML::load_file(filepath)
-  configuration.each do |config, option|
-    if config    == "http_port"
-      HTTP_PORT      = option
-    elsif config == "websocket_port"
-      WEBSOCKET_PORT = option
-    elsif config == "tcp_port"
-      TCP_PORT       = option
-    end
-  end
+if ARGV.include?("--server") and filepath 
+  @configuration = YAML::load_file(filepath)
+  @configuration = @configuration[ARGV[ARGV.index("--server")+1]]
 else
-  HTTP_PORT      = 8783
-  WEBSOCKET_PORT = 8784
-  TCP_PORT       = 8785
+  @configuration = {}
+  @configuration["http_port"]      = 8783
+  @configuration["websocket_port"] = 8784
+  @configuration["tcp_port"]       = 8785
 end
 
-5.times do |i|
-  system "serialport-server /dev/ttyACM#{i} -hp #{HTTP_PORT} -wp #{WEBSOCKET_PORT} -sp #{TCP_PORT}"
+if ARGV.include?("--help")
+  puts "\n    ## Light Server"
+  puts "      Usage:"
+  puts "      Please specify the server defined in the configuration to start:\n"
+  puts "          lsrvr [options]"
+  puts "      Options:"
+  puts "          --server [option]       # Provide the name of a server, if none default ports (8783, 8784, 8785) will be used\n"
+  puts "      Example:"
+  puts "          lsrvr -s desk\n\n"
+else
+  5.times do |i|
+    system "serialport-server /dev/ttyACM#{i} -hp #{@configuration["http_port"]} -wp #{@configuration["websocket_port"]} -sp #{@configuration["tcp_port"]}"
+  end
 end
+
