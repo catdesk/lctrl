@@ -20,15 +20,13 @@ end
 def set_lights(red: 0, green: 0, blue: 0, location: "all")
   colors = "{\"red\":#{red},\"green\":#{green},\"blue\":#{blue}}"
   if location == "all"
-  @configuration["servers"].each do |server, config|
+    @configuration["servers"].each do |server, config|
       p "Attempting to update the lights on: #{server}..."
       system "curl -d '#{colors}' http://#{config["host_ip"]}:#{config["http_port"]}"
-      echo "\n"
     end
   else
-    p "Attempting to update the lights on: #{@configuration[location]}..."
-    system "curl -d '#{colors}' http://#{@configuration[location]["host_ip"]}:#{@configuration[location]["http_port"]}"
-    echo "\n"
+    p "Attempting to update the lights on: #{@configuration["servers"][location]}..."
+    system "curl -d '#{colors}' http://#{@configuration["servers"][location]["host_ip"]}:#{@configuration["servers"][location]["http_port"]}"
   end
   puts "\n"
 end
@@ -41,6 +39,7 @@ aliases = {
   "-b"  => "--blue",
   "-g"  => "--green",
   "-rn" => "--random",
+  "-m"  => "--mood",
   "-x"  => "--off",
   "-s"  => "--server",
   "-h"  => "--help",
@@ -62,6 +61,20 @@ if ARGV.include?("--blue") or ARGV.include?("--red") or ARGV.include?("--green")
   green = ARGV.include?("--green") ? ARGV[ARGV.index("--green")+1] : 0
   blue  = ARGV.include?("--blue")  ? ARGV[ARGV.index("--blue")+1]  : 0
   set_lights(red: red, green: green, blue: blue, location: server)
+elsif ARGV.include?("--mood")
+  mood = ARGV[ARGV.index("--mood")+1]
+  if mood == "chill"
+    @configuration["servers"].each_with_index do |server, index|
+      p "XXX"
+      p index
+      p server
+      if index.even?
+        set_lights(red: 0, green: 74, blue: 254, location: server[0])
+      else
+        set_lights(red: 0, green: 254, blue: 74, location: server[0])
+      end
+    end
+  end
 elsif ARGV.include?("--random")
   set_lights(red: rand(255), green: rand(255), blue: rand(255), location: server)
 elsif (ARGV.include?("--color") and ARGV[ARGV.index("--color")+1] == "white")
