@@ -21,7 +21,7 @@ Then you copy the config file to your home directory, update the config to suite
 
 Then start the server
 
-    lsrvr --server desk
+    lsrvr -s desk -d
 
 Then you can use the ltctrl command to control the lights. 
 
@@ -33,13 +33,14 @@ For the command line interface:
     Please specify colors by name, json or rgb:
         lctrl [options]
     Options:
-        --red   [option]       # Provide a number 0-255, 0 being off and 255 being the brightest
-        --green [option]       # Provide a number 0-255, 0 being off and 255 being the brightest
-        --blue  [option]       # Provide a number 0-255, 0 being off and 255 being the brightest
-        --color [option]       # Select between, "red", "blue", "green" or "white"
-        --json  [json]         # Supply json directly: {"red": 0, "blue": 255, "green", 0}
-        --random               # Randomly select a color
-        --off                  # Turns off the lights
+        --server [option]       # Specify the server from the configuration file
+        --red    [option]       # Provide a number 0-255, 0 being off and 255 being the brightest
+        --green  [option]       # Provide a number 0-255, 0 being off and 255 being the brightest
+        --blue   [option]       # Provide a number 0-255, 0 being off and 255 being the brightest
+        --color  [option]       # Select between, "red", "blue", "green" or "white"
+        --json   [json]         # Supply json directly: {"red": 0, "blue": 255, "green", 0}
+        --random                # Randomly select a color
+        --off                   # Turns off the lights
     Example:
         lctrl --green 255 --blue 24
         lctrl -g 255 -b 24
@@ -52,6 +53,7 @@ For the server daemon:
         lsrvr [options]
     Options:
         --server [option]       # Provide a server defined in the config file
+        --daemon                # Daemonize the server
     Example:
         lctrl --server wall
         lctrl -s wall
