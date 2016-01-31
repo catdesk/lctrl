@@ -23,10 +23,12 @@ def set_lights(red: 0, green: 0, blue: 0, location: "all")
   @configuration["servers"].each do |server, config|
       p "Attempting to update the lights on: #{server}..."
       system "curl -d '#{colors}' http://#{config["host_ip"]}:#{config["http_port"]}"
+      echo "\n"
     end
   else
     p "Attempting to update the lights on: #{@configuration[location]}..."
     system "curl -d '#{colors}' http://#{@configuration[location]["host_ip"]}:#{@configuration[location]["http_port"]}"
+    echo "\n"
   end
   puts "\n"
 end
