@@ -27,6 +27,8 @@ Then you can use the ltctrl command to control the lights.
 
 ## Usage
 
+For the command line interface:
+
     Usage:
     Please specify colors by name, json or rgb:
         lctrl [options]
@@ -42,6 +44,8 @@ Then you can use the ltctrl command to control the lights.
         lctrl --green 255 --blue 24
         lctrl -g 255 -b 24
 
+
+For the server daemon:
 
     Usage:
     Please specify the server defined in the configuration to start:
