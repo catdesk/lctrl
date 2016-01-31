@@ -1,6 +1,21 @@
 # ltctrl
 
-Simple command line interface to control RGB light strip, best used in conjuction with simple serial server gem.
+Simple command line interface to control RGB light strip, best used in conjuction with the gem serialport-server but any service that takes in messages from POST requests and passes them along to the serial port will work.
+
+## Installation
+
+To install it is best to put the lctrl executable your bin folder:
+
+    cp lctrl /usr/local/bin
+
+Then you copy the config file to your home directory:
+
+    cp config/config.sample.yml ~/.lctrl.yml
+
+Then install the s
+
+## Usage
+
 
     Usage:
     Please specify colors by name, json or rgb:
@@ -10,7 +25,12 @@ Simple command line interface to control RGB light strip, best used in conjuctio
         --green [option]       # Provide a number 0-255, 0 being off and 255 being the brightest
         --blue  [option]       # Provide a number 0-255, 0 being off and 255 being the brightest
         --color [option]       # Select between, "red", "blue", "green" or "white"
+        --json  [json]         # Supply json directly: {"red": 0, "blue": 255, "green", 0}
         --random               # Randomly select a color
         --off                  # Turns off the lights
     Example:
         lctrl -g 255 -b 24
+
+## Roadmap
+
+If I have time in the future I would like to add more configuration options, you should be able to specify if you would like to send the message directly over serial and what port, or over websockets, or over TCP. You should also be able to supply the details for several light strips. The original code was able to control two. 
