@@ -6,6 +6,8 @@ Included is arduino code to accept json structures that provide brightness of ea
 
 ## Installation
 
+An install script has been included to simplyify installation but the basic instructions are below:
+
 Install the dependencies
 
     bundle
