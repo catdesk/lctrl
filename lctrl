@@ -65,11 +65,8 @@ elsif ARGV.include?("--mood")
   mood = ARGV[ARGV.index("--mood")+1]
   if mood == "chill"
     @configuration["servers"].each_with_index do |server, index|
-      p "XXX"
-      p index
-      p server
-      if index.even?
-        set_lights(red: 0, green: 74, blue: 254, location: server[0])
+      if index.odd?
+        set_lights(red: 0, green: 125, blue: 254, location: server[0])
       else
         set_lights(red: 0, green: 254, blue: 74, location: server[0])
       end
