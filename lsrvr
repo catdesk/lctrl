@@ -21,7 +21,7 @@ end
 
 if ARGV.include?("--server") and filepath 
   @configuration = YAML::load_file(filepath)
-  @configuration = @configuration[ARGV[ARGV.index("--server")+1]]
+  @configuration = @configuration["servers"][ARGV[ARGV.index("--server")+1]]
 else
   @configuration = {}
   @configuration["http_port"]      = 8783
@@ -41,6 +41,7 @@ if ARGV.include?("--help")
   puts "          lsrvr -s desk\n\n"
 else
   5.times do |i|
+    p i
     if ARGV.include?("--daemon")
       system "nohup serialport-server /dev/ttyACM#{i} -hp #{@configuration["http_port"]} -wp #{@configuration["websocket_port"]} -sp #{@configuration["tcp_port"]} &"
     else
