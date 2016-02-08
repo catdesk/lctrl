@@ -2,3 +2,5 @@ config/config.yml
 *.swp
 *.swa
 nohup.out
+arduino/build*
+*dblite
