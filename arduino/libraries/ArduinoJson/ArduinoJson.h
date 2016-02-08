@@ -1,3 +1,10 @@
+// WARNING:
+// --------
+// This file is a workaround for old version of the Arduino IDE.
+// If you are using Arduino IDE 1.0.6 or above, then you installed the wrong 
+// package of ArduinoJson.
+// In that case, just delete the current installation and install the package.
+
 // Copyright Benoit Blanchon 2014-2016
 // MIT License
 //
@@ -5,10 +12,9 @@
 // https://github.com/bblanchon/ArduinoJson
 // If you like this project, please add a star!
 
-// About this file
-// ---------------
-// This file is here for [PlatformIO](http://platformio.org/).
-// It must be present in the root for the tool to find it.
-// Feel free to ignore this file if your working in another environment.
+#include "include/ArduinoJson/DynamicJsonBuffer.hpp"
+#include "include/ArduinoJson/JsonArray.hpp"
+#include "include/ArduinoJson/JsonObject.hpp"
+#include "include/ArduinoJson/StaticJsonBuffer.hpp"
 
-#include "include/ArduinoJson.h"
+using namespace ArduinoJson;

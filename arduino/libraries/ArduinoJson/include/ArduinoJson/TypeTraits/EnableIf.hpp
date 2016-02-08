@@ -8,7 +8,15 @@
 #pragma once
 
 namespace ArduinoJson {
-namespace Internals {
-const char *skipSpacesAndComments(const char *ptr);
+namespace TypeTraits {
+
+// A meta-function that return the type T if Condition is true.
+template <bool Condition, typename T>
+struct EnableIf {};
+
+template <typename T>
+struct EnableIf<true, T> {
+  typedef T type;
+};
 }
 }

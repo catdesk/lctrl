@@ -1,10 +1,20 @@
 ArduinoJson: change log
 =======================
 
-HEAD
-----
+v5.1.0
+------
+
+* Added support of `long long` (issue #171)
+* Moved all build settings to `ArduinoJson/Configuration.hpp`
+
+**BREAKING CHANGE**:
+If you defined `ARDUINOJSON_ENABLE_STD_STREAM`, you now need to define it to `1`.
+
+v5.0.8
+------
 
 * Made the library compatible with [PlatformIO](http://platformio.org/) (issue #181)
+* Fixed `JsonVariant::is<bool>()` that was incorrectly returning false (issue #214)
 
 v5.0.7
 ------
