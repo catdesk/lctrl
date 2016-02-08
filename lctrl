@@ -65,18 +65,21 @@ elsif ARGV.include?("--mood")
   mood = ARGV[ARGV.index("--mood")+1]
   if mood == "chill"
     @configuration["servers"].each_with_index do |server, index|
-      p "XXX"
-      p index
-      p server
-      if index.even?
-        set_lights(red: 0, green: 74, blue: 254, location: server[0])
+      if index.odd?
+        set_lights(red: 0, green: 125, blue: 254, location: server[0])
       else
         set_lights(red: 0, green: 254, blue: 74, location: server[0])
       end
     end
   end
 elsif ARGV.include?("--random")
-  set_lights(red: rand(255), green: rand(255), blue: rand(255), location: server)
+  @configuration["servers"].each_with_index do |server, index|
+    if index.odd?
+      set_lights(red: rand(255), green: rand(255), blue: rand(255), location: server[0])
+    else
+      set_lights(red: rand(255), green: rand(255), blue: rand(255), location: server[0])
+    end
+  end
 elsif (ARGV.include?("--color") and ARGV[ARGV.index("--color")+1] == "white")
   set_lights(red: 255, green: 255, blue: 255, location: server)
 elsif (ARGV.include?("--color") and ARGV[ARGV.index("--color")+1] == "blue")

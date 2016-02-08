@@ -5,7 +5,7 @@ api_version: "1"
 
 servers:
   desk:
-    host_ip: "localhost"
+    host_ip: "192.168.1.138"
     http_port: 8783
     websocket_port: 8784
     tcp_port: 8785
