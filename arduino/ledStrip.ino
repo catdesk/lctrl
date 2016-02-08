@@ -2,8 +2,8 @@
 #include <ArduinoJson.h>
 using namespace Aiko;
 
-int             ledGreen = 2;
-int             ledBlue = 4;
+int             ledGreen = 5;
+int             ledBlue = 6;
 int             ledRed = 3;
 
 boolean         inputJson;
@@ -19,18 +19,36 @@ int blue[]    = {0, 0};
 
 int fadeSpeed = 1;
 
-void setup() {
-  Serial.begin(9600);
-  Serial.println("Lights Active");
-  pinMode(ledGreen, OUTPUT);
-  pinMode(ledBlue, OUTPUT);
-  pinMode(ledRed, OUTPUT);
-  Events.addHandler(userInput, 100);
-  Events.addHandler(fade, 25);
+int setColors(int redValue, int greenValue, int blueValue) {
+  red[1] = redValue;
+  blue[1] = blueValue;
+  green[1] = greenValue;
 }
 
-void loop() {
-  Events.loop();
+void printColors(){
+  Serial.print("{\"red\":");
+  Serial.print(red[1]);
+  Serial.print(",\"green\":");
+  Serial.print(green[1]);
+  Serial.print(",\"blue\":");
+  Serial.print(blue[1]);
+  Serial.print(",\"fadeSpeed\":");
+  Serial.print(fadeSpeed);
+  Serial.print("}\n");
+  Serial.flush();
+}
+
+void processString(String inString){
+  StaticJsonBuffer<200> jsonBuffer;
+  char json[64];
+  inString.toCharArray(json, 64);
+  JsonObject& root = jsonBuffer.parseObject(inString);
+  setColors(root["red"], root["green"], root["blue"]);
+  if(root["fadeSpeed"] == 0)
+    fadeSpeed = 1;
+  else
+    fadeSpeed = root["fadeSpeed"];
+  printColors();
 }
 
 void constructString(int c){
@@ -52,38 +70,6 @@ void userInput(){
     do{c = Serial.read();}while (c == -1);
     constructString(c);
   }
-}
-
-void processString(String inString){
-  StaticJsonBuffer<200> jsonBuffer;
-  char json[64];
-  inString.toCharArray(json, 64);
-  JsonObject& root = jsonBuffer.parseObject(inString);
-  setColors(root["red"], root["green"], root["blue"]);
-  if(root["fadeSpeed"] == 0)
-    fadeSpeed = 1;
-  else
-    fadeSpeed = root["fadeSpeed"];
-  printColors();
-}
-
-int setColors(int redValue, int greenValue, int blueValue) {
-  red[1] = redValue;
-  blue[1] = blueValue;
-  green[1] = greenValue;
-}
-
-void printColors(){
-  Serial.print("{\"red\":");
-  Serial.print(red[1]);
-  Serial.print(",\"green\":");
-  Serial.print(green[1]);
-  Serial.print(",\"blue\":");
-  Serial.print(blue[1]);
-  Serial.print(",\"fadeSpeed\":");
-  Serial.print(fadeSpeed);
-  Serial.print("}\n");
-  Serial.flush();
 }
 
 void fade(){
@@ -115,3 +101,19 @@ void fade(){
     if((fadeSpeed - blue[0]) < blue[1])
       blue[0] = blue[1];      
 }
+
+
+void setup() {
+  Serial.begin(9600);
+  Serial.println("Lights Active");
+  pinMode(ledGreen, OUTPUT);
+  pinMode(ledBlue, OUTPUT);
+  pinMode(ledRed, OUTPUT);
+  Events.addHandler(userInput, 100);
+  Events.addHandler(fade, 25);
+}
+
+void loop() {
+  Events.loop();
+}
+
